@@ -6,7 +6,6 @@ import {
   Linkedin, 
   Mail, 
   Code, 
-  User, 
   Briefcase, 
   ExternalLink, 
   Terminal, 
@@ -14,14 +13,11 @@ import {
   Cpu, 
   Server, 
   Layers, 
-  Clock, 
-  Calendar,
   Flame,
   Sun,
   Moon,
   Menu,
   X,
-  Download,
   ArrowUp,
   Send,
   Hexagon,
@@ -63,7 +59,7 @@ interface Project {
 let roleIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
-let typeTimeout: number | null = null;
+let typeTimeout: ReturnType<typeof setTimeout> | null = null;
 
 const openModal = (project: Project) => {
   selectedProject.value = project;
