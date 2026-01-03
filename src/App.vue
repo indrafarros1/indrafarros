@@ -187,6 +187,12 @@ const timeline: TimelineItem[] = [
 
 const projects: Project[] = [
   {
+    title: "Helpdesk System",
+    description: "Enterprise helpdesk application with Golang backend, Vue 3 frontend, and PostgreSQL. Features ticket management, user roles, SLA tracking, and real-time notifications.",
+    tags: ["Golang", "Vue 3", "PostgreSQL"],
+    link: "#"
+  },
+  {
     title: "sAirport TPS Online System",
     description: "Integrated logistics platform for airport temporary storage, featuring real-time Customs (Bea Cukai) data exchange and automated B2B billing.",
     tags: ["Integration", "Customs API", "Logistics"],
