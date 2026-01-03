@@ -346,12 +346,12 @@ const projects: Project[] = [
               <div class="absolute -bottom-3 -left-3 w-12 h-12 border-4 border-orange-500"></div>
               
               <!-- Photo container -->
-              <div class="relative aspect-square bg-zinc-200 dark:bg-zinc-800 overflow-hidden border-2 border-zinc-900 dark:border-white">
+              <div class="relative aspect-[3/4] bg-zinc-200 dark:bg-zinc-800 overflow-hidden border-2 border-zinc-900 dark:border-white">
                 <!-- Replace this with your actual photo -->
                 <img 
-                  src="https://ui-avatars.com/api/?name=Indra+Farros&size=400&background=f97316&color=fff&bold=true&font-size=0.4" 
+                  src="/indra.jpg" 
                   alt="Indra Mochamad Farros"
-                  class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                  class="w-full h-full object-cover hover:grayscale-0 transition-all duration-500"
                 />
                 
                 <!-- Corner decorations -->
