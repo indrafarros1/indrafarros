@@ -191,7 +191,7 @@ const timeline: TimelineItem[] = [
 
 const projects: Project[] = [
   {
-    title: "Airport TPS Online System",
+    title: "sAirport TPS Online System",
     description: "Integrated logistics platform for airport temporary storage, featuring real-time Customs (Bea Cukai) data exchange and automated B2B billing.",
     tags: ["Integration", "Customs API", "Logistics"],
     link: "#"
