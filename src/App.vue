@@ -431,7 +431,7 @@ const projects: Project[] = [
           <a href="https://github.com" target="_blank" class="p-3 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-white hover:bg-orange-500 hover:border-orange-500 dark:hover:bg-orange-500 dark:hover:border-orange-500 transition-all group">
             <Github :size="20" class="text-zinc-900 dark:text-white group-hover:text-white transition-colors" />
           </a>
-          <a href="https://linkedin.com/indrafarros" target="_blank" class="p-3 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-white hover:bg-orange-500 hover:border-orange-500 dark:hover:bg-orange-500 dark:hover:border-orange-500 transition-all group">
+          <a href="https://linkedin.com/in/indrafarros" target="_blank" class="p-3 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-white hover:bg-orange-500 hover:border-orange-500 dark:hover:bg-orange-500 dark:hover:border-orange-500 transition-all group">
             <Linkedin :size="20" class="text-zinc-900 dark:text-white group-hover:text-white transition-colors" />
           </a>
           <a href="mailto:indrafarros.fi@gmail.com" class="p-3 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-white hover:bg-orange-500 hover:border-orange-500 dark:hover:bg-orange-500 dark:hover:border-orange-500 transition-all group">
