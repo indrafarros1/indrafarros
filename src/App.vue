@@ -193,7 +193,7 @@ const projects: Project[] = [
     link: "#"
   },
   {
-    title: "sAirport TPS Online System",
+    title: "Airport TPS Online System",
     description: "Integrated logistics platform for airport temporary storage, featuring real-time Customs (Bea Cukai) data exchange and automated B2B billing.",
     tags: ["Integration", "Customs API", "Logistics"],
     link: "#"
@@ -250,6 +250,12 @@ const projects: Project[] = [
     title: "Stunting Awareness Portal",
     description: "Educational landing page for a community health center (Puskesmas) focused on stunting prevention and nutrition.",
     tags: ["Frontend", "Public Health", "Responsive"],
+    link: "#"
+  },
+  {
+    title: "Helpdesk MTI Mobile",
+    description: "Cross-platform mobile helpdesk application for MTI, built with React Native Expo for Android and iOS. Features ticket submission, real-time status tracking, push notifications, and seamless integration with the existing helpdesk backend system.",
+    tags: ["React Native", "Expo", "Android", "iOS"],
     link: "#"
   }
 ];
