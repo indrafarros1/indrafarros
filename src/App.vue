@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import type { Ref } from 'vue';
 import { 
   Github, 
@@ -21,11 +21,21 @@ import {
   ArrowUp,
   Send,
   Hexagon,
-  Hash
+  Hash,
+  Smartphone,
+  FileCode,
+  GraduationCap,
+  Download,
+  Filter,
+  Lock,
+  MapPin,
+  User,
+  MessageSquare,
+  Calendar
 } from "lucide-vue-next";
 
 const name = "Indra Mochamad Farros";
-const roles = ["Software Engineering"];
+const roles = ["Software Engineering", "Backend Developer", "System Architect", "API Specialist"];
 const currentRole: Ref<string> = ref("");
 const isDark: Ref<boolean> = ref(true);
 const isMenuOpen: Ref<boolean> = ref(false);
@@ -33,6 +43,10 @@ const isScrolled: Ref<boolean> = ref(false);
 const showBackToTop: Ref<boolean> = ref(false);
 const selectedProject: Ref<Project | null> = ref(null);
 const isModalOpen: Ref<boolean> = ref(false);
+const activeFilter: Ref<string> = ref('All');
+const contactForm = ref({ name: '', email: '', message: '' });
+const isSubmitting: Ref<boolean> = ref(false);
+const submitSuccess: Ref<boolean> = ref(false);
 
 // Types
 interface Skill {
@@ -51,8 +65,17 @@ interface TimelineItem {
 interface Project {
   title: string;
   description: string;
+  detailedDescription: string;
   tags: string[];
+  category: string;
   link: string;
+}
+
+interface Education {
+  year: string;
+  degree: string;
+  institution: string;
+  description: string;
 }
 
 // Typing Effect Logic
@@ -149,6 +172,8 @@ const skills: Skill[] = [
   { name: "Golang", icon: Terminal, color: "text-orange-600 dark:text-orange-500" },
   { name: "Node.js", icon: Server, color: "text-zinc-700 dark:text-zinc-400" },
   { name: "Vue.js", icon: Layers, color: "text-zinc-700 dark:text-zinc-400" },
+  { name: "React Native", icon: Smartphone, color: "text-zinc-700 dark:text-zinc-400" },
+  { name: "TypeScript", icon: FileCode, color: "text-zinc-700 dark:text-zinc-400" },
   { name: "Laravel", icon: Server, color: "text-orange-600 dark:text-orange-500" },
   { name: "NestJS", icon: Hexagon, color: "text-zinc-700 dark:text-zinc-400" },
   { name: "Express.js", icon: Hash, color: "text-slate-600 dark:text-slate-400" },
@@ -185,80 +210,134 @@ const timeline: TimelineItem[] = [
   }
 ];
 
+const education: Education[] = [
+  {
+    year: "2016 - 2020",
+    degree: "Sarjana Komputer (S.Kom)",
+    institution: "Universitas Indraprasta PGRI",
+    description: "Focused on software engineering, database systems, and web application development."
+  }
+];
+
+const projectCategories = ['All', 'Backend', 'Frontend', 'Mobile', 'Integration', 'Fullstack'];
+
 const projects: Project[] = [
   {
     title: "Helpdesk System",
     description: "Enterprise helpdesk application with Golang backend, Vue 3 frontend, and PostgreSQL. Features ticket management, user roles, SLA tracking, and real-time notifications.",
+    detailedDescription: "Built from scratch as the primary support system for internal operations. Implements role-based access control (Admin, Agent, User), SLA deadline enforcement with automated escalation, and real-time WebSocket notifications. The backend uses clean architecture with Golang for high concurrency, and the Vue 3 frontend provides a responsive dashboard with ticket analytics.",
     tags: ["Golang", "Vue 3", "PostgreSQL"],
+    category: "Fullstack",
     link: "#"
   },
   {
     title: "Airport TPS Online System",
     description: "Integrated logistics platform for airport temporary storage, featuring real-time Customs (Bea Cukai) data exchange and automated B2B billing.",
+    detailedDescription: "Optimized and maintained a mission-critical logistics platform handling daily cargo data exchange with Customs (Bea Cukai) APIs. Implemented automated B2B billing synchronization, improved query performance on high-volume transaction tables, and ensured 99.9% uptime for real-time data reporting used by airport stakeholders.",
     tags: ["Integration", "Customs API", "Logistics"],
+    category: "Integration",
     link: "#"
   },
   {
     title: "Agent Ticket Booking Platform",
     description: "B2B platform for agents to book tickets, manage schedules, and handle payments with customer support integration.",
+    detailedDescription: "Developed a multi-tenant B2B booking platform where travel agents can search schedules, reserve tickets, and process payments through integrated payment gateways. Features include agent commission tracking, booking history, automated invoice generation, and a built-in customer support ticketing module.",
     tags: ["Codeigniter", "MySQL", "Payment Gateway"],
+    category: "Fullstack",
     link: "#"
   },
   {
     title: "Hotel Booking Integration",
     description: "Developed a hotel booking module featuring seamless payment API integration and a user-friendly booking interface.",
+    detailedDescription: "Integrated third-party hotel inventory APIs to provide real-time room availability and pricing. Implemented a secure payment flow with multiple gateway support, booking confirmation workflows, and automated email notifications. The interface was designed for simplicity with date-range pickers and dynamic pricing display.",
     tags: ["API Integration", "Payment Gateway", "Booking System"],
+    category: "Integration",
     link: "#"
   },
   {
     title: "Gold & Forex POS System",
     description: "Specialized Point of Sale system for gold and forex stores featuring operational optimization and financial reporting.",
+    detailedDescription: "Custom POS system tailored for gold and foreign exchange retail operations. Features include real-time gold price tracking, multi-currency exchange calculations, daily profit/loss reporting, inventory management for gold products, and thermal receipt printing. Designed for speed and accuracy in high-transaction environments.",
     tags: ["Codeigniter", "MySQL", "Reporting"],
+    category: "Fullstack",
     link: "#"
   },
   {
     title: "PJU Production Application",
     description: "Management system for public street lighting pole production, facilitating progress tracking and coordination.",
+    detailedDescription: "Production management system for tracking the manufacturing lifecycle of public street lighting (PJU) poles. Features include production batch tracking, quality control checkpoints, material inventory management, progress dashboards for stakeholders, and exportable reports for government compliance.",
     tags: ["Codeigniter", "MySQL", "Production"],
+    category: "Fullstack",
     link: "#"
   },
   {
     title: "Logistics Container Module",
     description: "Developed a container return module to enhance logistics process efficiency and tracking.",
+    detailedDescription: "Built a specialized module within an existing logistics platform to manage container return operations. Tracks container status from dispatch to return, calculates demurrage charges, generates return scheduling, and provides real-time visibility into container fleet utilization for operations teams.",
     tags: ["PHP", "Logistics", "Optimization"],
+    category: "Backend",
     link: "#"
   },
   {
     title: "Beauty Clinic Management",
     description: "Maintenance and feature expansion for a beauty clinic application to optimize operational functionality.",
+    detailedDescription: "Took over maintenance of an existing beauty clinic management system and expanded its functionality. Added appointment scheduling, treatment history tracking, patient CRM features, and financial reporting. Improved system stability through bug fixes, database optimization, and code refactoring.",
     tags: ["CodeIgniter", "Maintenance", "Healthcare"],
+    category: "Fullstack",
     link: "#"
   },
   {
     title: "Enterprise App Maintenance",
     description: "Regular maintenance and optimization of existing running applications to ensure stability and performance.",
+    detailedDescription: "Ongoing maintenance responsibility across multiple enterprise applications. Activities include performance profiling and optimization, security patch implementation, database query tuning, dependency updates, bug triage and resolution, and ensuring high availability across production environments.",
     tags: ["Maintenance", "Bug Fixes", "Optimization"],
+    category: "Backend",
     link: "#"
   },
   {
     title: "Ministry LHKPN System",
     description: "Developed a wealth reporting system (LHKPN) for a government ministry to ensure transparency and compliance.",
+    detailedDescription: "Government compliance system for managing LHKPN (Laporan Harta Kekayaan Penyelenggara Negara) submissions. Features include secure form submission with document uploads, approval workflows, audit trails, role-based access for administrators and officials, and exportable compliance reports meeting regulatory standards.",
     tags: ["Laravel", "MySQL"],
+    category: "Fullstack",
     link: "#"
   },
   {
     title: "Stunting Awareness Portal",
     description: "Educational landing page for a community health center (Puskesmas) focused on stunting prevention and nutrition.",
+    detailedDescription: "Responsive informational website for a community health center focused on stunting prevention awareness. Features include educational content sections about child nutrition, growth monitoring guidelines, interactive BMI calculators, and resource downloads for parents and healthcare workers. Optimized for mobile access in rural areas.",
     tags: ["Frontend", "Public Health", "Responsive"],
+    category: "Frontend",
     link: "#"
   },
   {
     title: "Helpdesk MTI Mobile",
     description: "Cross-platform mobile helpdesk application for MTI, built with React Native Expo for Android and iOS. Features ticket submission, real-time status tracking, push notifications, and seamless integration with the existing helpdesk backend system.",
+    detailedDescription: "Cross-platform mobile companion app for the MTI Helpdesk system. Built with React Native Expo for simultaneous Android and iOS deployment. Features include ticket creation with photo attachments, real-time status updates via push notifications, ticket history and search, and offline draft support. Communicates with the existing Golang backend through RESTful APIs.",
     tags: ["React Native", "Expo", "Android", "iOS"],
+    category: "Mobile",
     link: "#"
   }
 ];
+
+const filteredProjects = computed(() => {
+  if (activeFilter.value === 'All') return projects;
+  return projects.filter(p => p.category === activeFilter.value);
+});
+
+const handleContactSubmit = () => {
+  isSubmitting.value = true;
+  const { name: senderName, email, message } = contactForm.value;
+  const subject = encodeURIComponent(`Portfolio Contact from ${senderName}`);
+  const body = encodeURIComponent(`Name: ${senderName}\nEmail: ${email}\n\n${message}`);
+  window.open(`mailto:indrafarros.fi@gmail.com?subject=${subject}&body=${body}`);
+  setTimeout(() => {
+    isSubmitting.value = false;
+    submitSuccess.value = true;
+    contactForm.value = { name: '', email: '', message: '' };
+    setTimeout(() => { submitSuccess.value = false; }, 3000);
+  }, 500);
+};
 </script>
 
 <template>
@@ -285,6 +364,7 @@ const projects: Project[] = [
           <a href="#tech" class="text-xs font-black uppercase tracking-wider px-4 py-2 hover:bg-orange-500 hover:text-white transition-all">Tech</a>
           <a href="#journey" class="text-xs font-black uppercase tracking-wider px-4 py-2 hover:bg-orange-500 hover:text-white transition-all">Journey</a>
           <a href="#projects" class="text-xs font-black uppercase tracking-wider px-4 py-2 hover:bg-orange-500 hover:text-white transition-all">Projects</a>
+          <a href="#contact" class="text-xs font-black uppercase tracking-wider px-4 py-2 hover:bg-orange-500 hover:text-white transition-all">Contact</a>
           
           <!-- Theme Toggle -->
           <button 
@@ -310,6 +390,7 @@ const projects: Project[] = [
         <a href="#tech" @click="isMenuOpen = false" class="text-sm font-black uppercase tracking-wider px-4 py-3 hover:bg-orange-500 hover:text-white transition-all border-l-4 border-transparent hover:border-zinc-900 dark:hover:border-white">Tech</a>
         <a href="#journey" @click="isMenuOpen = false" class="text-sm font-black uppercase tracking-wider px-4 py-3 hover:bg-orange-500 hover:text-white transition-all border-l-4 border-transparent hover:border-zinc-900 dark:hover:border-white">Journey</a>
         <a href="#projects" @click="isMenuOpen = false" class="text-sm font-black uppercase tracking-wider px-4 py-3 hover:bg-orange-500 hover:text-white transition-all border-l-4 border-transparent hover:border-zinc-900 dark:hover:border-white">Projects</a>
+        <a href="#contact" @click="isMenuOpen = false" class="text-sm font-black uppercase tracking-wider px-4 py-3 hover:bg-orange-500 hover:text-white transition-all border-l-4 border-transparent hover:border-zinc-900 dark:hover:border-white">Contact</a>
         <div class="flex items-center justify-between mt-4 pt-4 border-t-2 border-zinc-300 dark:border-zinc-800">
           <span class="text-xs font-black uppercase tracking-wider">Theme</span>
           <button 
@@ -436,6 +517,12 @@ const projects: Project[] = [
           <a href="#projects" class="px-8 py-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-black uppercase text-sm tracking-wider hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all border-b-4 border-zinc-950 dark:border-zinc-300 hover:border-b-2 hover:translate-y-0.5">
             View Projects
           </a>
+          <a href="/cv-indra-farros.pdf" download class="px-8 py-4 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white font-black uppercase text-sm tracking-wider hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all border-2 border-zinc-900 dark:border-white hover:border-orange-500 dark:hover:border-orange-500">
+            <span class="flex items-center gap-2">
+              <Download :size="18" />
+              Download CV
+            </span>
+          </a>
         </div>
         
         <!-- Social Links Industrial -->
@@ -532,6 +619,53 @@ const projects: Project[] = [
         </div>
       </section>
 
+      <!-- Education -->
+      <section id="education" class="mb-32 scroll-mt-32">
+        <div 
+          v-motion
+          :initial="{ opacity: 0, x: -50 }"
+          :visible="{ opacity: 1, x: 0, transition: { duration: 600 } }"
+          class="mb-12"
+        >
+          <div class="flex items-center gap-4 mb-2">
+            <div class="w-2 h-12 bg-orange-500"></div>
+            <h3 class="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white uppercase tracking-tighter">
+              Education
+            </h3>
+          </div>
+          <div class="pl-6 border-l-4 border-zinc-300 dark:border-zinc-800 ml-2">
+            <p class="text-sm font-mono uppercase tracking-wider text-zinc-600 dark:text-zinc-500">Academic Background</p>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div v-for="(edu, index) in education" :key="index"
+               v-motion
+               :initial="{ opacity: 0, y: 20 }"
+               :visible="{ opacity: 1, y: 0, transition: { delay: index * 150, duration: 500 } }"
+               class="group relative bg-white dark:bg-zinc-900 border-l-8 border-orange-500 p-6 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all"
+          >
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+              <div class="flex-1">
+                <div class="inline-block px-3 py-1 bg-zinc-900 dark:bg-white mb-3">
+                  <span class="text-xs font-black uppercase tracking-widest text-white dark:text-zinc-900">{{ edu.year }}</span>
+                </div>
+                <h4 class="text-2xl font-black uppercase tracking-tight text-zinc-900 dark:text-white mb-2">{{ edu.degree }}</h4>
+                <div class="flex items-center gap-2 text-orange-600 dark:text-orange-500 font-bold uppercase text-sm">
+                  <GraduationCap :size="16" /> {{ edu.institution }}
+                </div>
+              </div>
+            </div>
+            
+            <p class="text-zinc-700 dark:text-zinc-400 leading-relaxed border-l-2 border-zinc-300 dark:border-zinc-700 pl-4">
+              {{ edu.description }}
+            </p>
+            
+            <div class="absolute top-6 right-6 w-4 h-4 border-t-2 border-r-2 border-zinc-300 dark:border-zinc-700 group-hover:border-orange-500 transition-colors"></div>
+          </div>
+        </div>
+      </section>
+
       <!-- Projects -->
       <section id="projects" class="mb-32 scroll-mt-32">
         <div 
@@ -551,8 +685,27 @@ const projects: Project[] = [
           </div>
         </div>
 
+        <!-- Category Filter -->
+        <div class="flex flex-wrap gap-2 mb-8">
+          <button 
+            v-for="cat in projectCategories" :key="cat"
+            @click="activeFilter = cat"
+            :class="[
+              'px-4 py-2 text-xs font-black uppercase tracking-wider transition-all border-2',
+              activeFilter === cat 
+                ? 'bg-orange-500 border-orange-500 text-white' 
+                : 'bg-white dark:bg-zinc-900 border-zinc-900 dark:border-white text-zinc-900 dark:text-white hover:border-orange-500 dark:hover:border-orange-500'
+            ]"
+          >
+            <span class="flex items-center gap-1.5">
+              <Filter v-if="cat !== 'All'" :size="12" />
+              {{ cat }}
+            </span>
+          </button>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div v-for="(project, index) in projects" :key="project.title" 
+          <div v-for="(project, index) in filteredProjects" :key="project.title" 
                @click="openModal(project)"
                v-motion
                :initial="{ opacity: 0, y: 30 }"
@@ -566,15 +719,23 @@ const projects: Project[] = [
               <div class="p-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 group-hover:bg-orange-500 group-hover:text-white transition-all">
                 <Layers :size="24" />
               </div>
-              <button class="p-2 border-2 border-zinc-900 dark:border-white hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-zinc-900 transition-all">
-                <ExternalLink :size="16" />
-              </button>
+              <div class="flex items-center gap-2">
+                <span v-if="project.link === '#'" class="flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                  <Lock :size="12" /> Internal
+                </span>
+                <button v-else class="p-2 border-2 border-zinc-900 dark:border-white hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-zinc-900 transition-all">
+                  <ExternalLink :size="16" />
+                </button>
+              </div>
             </div>
             
             <h4 class="text-xl font-black uppercase tracking-tight text-zinc-900 dark:text-white mb-3 group-hover:text-orange-600 dark:group-hover:text-orange-500 transition-colors">{{ project.title }}</h4>
             <p class="text-zinc-700 dark:text-zinc-400 text-sm mb-6 flex-grow leading-relaxed">{{ project.description }}</p>
             
             <div class="flex flex-wrap gap-2 mt-auto">
+              <span class="text-[10px] font-black uppercase tracking-wider text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-950 px-2 py-0.5 border border-orange-300 dark:border-orange-800">
+                {{ project.category }}
+              </span>
               <span v-for="tag in project.tags" :key="tag" 
                     class="text-xs font-black uppercase tracking-wider text-zinc-900 dark:text-white bg-zinc-200 dark:bg-zinc-800 px-3 py-1 border border-zinc-900 dark:border-white">
                 {{ tag }}
@@ -623,6 +784,117 @@ const projects: Project[] = [
                 View Portfolio
               </a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Form -->
+      <section id="contact" class="mb-32 scroll-mt-32">
+        <div 
+          v-motion
+          :initial="{ opacity: 0, y: 30 }"
+          :visible="{ opacity: 1, y: 0, transition: { duration: 600 } }"
+          class="mb-12"
+        >
+          <div class="flex items-center gap-4 mb-2">
+            <div class="w-2 h-12 bg-orange-500"></div>
+            <h3 class="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white uppercase tracking-tighter">
+              Contact
+            </h3>
+          </div>
+          <div class="pl-6 border-l-4 border-zinc-300 dark:border-zinc-800 ml-2">
+            <p class="text-sm font-mono uppercase tracking-wider text-zinc-600 dark:text-zinc-500">Get In Touch</p>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- Contact Info -->
+          <div class="space-y-6">
+            <div class="bg-white dark:bg-zinc-900 border-l-8 border-orange-500 p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <Mail :size="20" class="text-orange-500" />
+                <span class="font-black uppercase text-sm tracking-wider text-zinc-900 dark:text-white">Email</span>
+              </div>
+              <a href="mailto:indrafarros.fi@gmail.com" class="text-zinc-600 dark:text-zinc-400 hover:text-orange-500 dark:hover:text-orange-500 transition-colors">
+                indrafarros.fi@gmail.com
+              </a>
+            </div>
+            <div class="bg-white dark:bg-zinc-900 border-l-8 border-orange-500 p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <MapPin :size="20" class="text-orange-500" />
+                <span class="font-black uppercase text-sm tracking-wider text-zinc-900 dark:text-white">Location</span>
+              </div>
+              <p class="text-zinc-600 dark:text-zinc-400">Jakarta, Indonesia</p>
+            </div>
+            <div class="bg-white dark:bg-zinc-900 border-l-8 border-orange-500 p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <Calendar :size="20" class="text-orange-500" />
+                <span class="font-black uppercase text-sm tracking-wider text-zinc-900 dark:text-white">Availability</span>
+              </div>
+              <p class="text-zinc-600 dark:text-zinc-400">Open for freelance & full-time opportunities</p>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="bg-white dark:bg-zinc-900 border-4 border-zinc-900 dark:border-white p-6 sm:p-8">
+            <form @submit.prevent="handleContactSubmit" class="space-y-5">
+              <div>
+                <label class="block text-xs font-black uppercase tracking-wider text-zinc-900 dark:text-white mb-2">
+                  <span class="flex items-center gap-2"><User :size="14" /> Name</span>
+                </label>
+                <input 
+                  v-model="contactForm.name"
+                  type="text" 
+                  required
+                  placeholder="Your name"
+                  class="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white font-mono text-sm focus:border-orange-500 focus:outline-none transition-colors"
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-wider text-zinc-900 dark:text-white mb-2">
+                  <span class="flex items-center gap-2"><Mail :size="14" /> Email</span>
+                </label>
+                <input 
+                  v-model="contactForm.email"
+                  type="email" 
+                  required
+                  placeholder="your@email.com"
+                  class="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white font-mono text-sm focus:border-orange-500 focus:outline-none transition-colors"
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-black uppercase tracking-wider text-zinc-900 dark:text-white mb-2">
+                  <span class="flex items-center gap-2"><MessageSquare :size="14" /> Message</span>
+                </label>
+                <textarea 
+                  v-model="contactForm.message"
+                  rows="4" 
+                  required
+                  placeholder="Tell me about your project..."
+                  class="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white font-mono text-sm focus:border-orange-500 focus:outline-none transition-colors resize-none"
+                ></textarea>
+              </div>
+              <button 
+                type="submit"
+                :disabled="isSubmitting"
+                class="w-full px-8 py-4 bg-orange-500 text-white font-black uppercase text-sm tracking-wider hover:bg-orange-600 transition-all border-b-4 border-orange-700 hover:border-b-2 hover:translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                <Send :size="18" />
+                {{ isSubmitting ? 'Sending...' : 'Send Message' }}
+              </button>
+              <Transition
+                enter-active-class="transition duration-300 ease-out"
+                enter-from-class="opacity-0 -translate-y-2"
+                enter-to-class="opacity-100 translate-y-0"
+                leave-active-class="transition duration-200 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+              >
+                <div v-if="submitSuccess" class="p-3 bg-green-100 dark:bg-green-900/30 border-2 border-green-500 text-green-700 dark:text-green-400 text-xs font-black uppercase tracking-wider text-center">
+                  Message prepared! Check your email client to send.
+                </div>
+              </Transition>
+            </form>
           </div>
         </div>
       </section>
@@ -698,17 +970,16 @@ const projects: Project[] = [
             </div>
 
             <div class="border-l-4 border-zinc-300 dark:border-zinc-700 pl-6 mb-6">
-              <p class="text-zinc-700 dark:text-zinc-400 leading-relaxed mb-4">{{ selectedProject?.description }}</p>
-              <p class="text-zinc-700 dark:text-zinc-400 leading-relaxed">
-                This project demonstrates the implementation of scalable architecture and modern development practices. 
-                It features a robust backend, responsive frontend, and seamless integration with third-party services.
-              </p>
+              <p class="text-zinc-700 dark:text-zinc-400 leading-relaxed">{{ selectedProject?.detailedDescription }}</p>
             </div>
 
             <div class="mt-8 flex flex-col sm:flex-row gap-4">
-               <a :href="selectedProject?.link" target="_blank" class="flex-1 flex items-center justify-center gap-2 px-8 py-4 bg-orange-500 text-white font-black uppercase text-sm tracking-wider hover:bg-orange-600 transition-all border-b-4 border-orange-700 hover:border-b-2 hover:translate-y-0.5">
+               <a v-if="selectedProject?.link !== '#'" :href="selectedProject?.link" target="_blank" class="flex-1 flex items-center justify-center gap-2 px-8 py-4 bg-orange-500 text-white font-black uppercase text-sm tracking-wider hover:bg-orange-600 transition-all border-b-4 border-orange-700 hover:border-b-2 hover:translate-y-0.5">
                  <ExternalLink :size="18" /> View Project
                </a>
+               <div v-else class="flex-1 flex items-center justify-center gap-2 px-8 py-4 bg-zinc-200 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 font-black uppercase text-sm tracking-wider cursor-default border-2 border-zinc-300 dark:border-zinc-700">
+                 <Lock :size="18" /> Internal / Private Project
+               </div>
                <button @click="closeModal" class="px-8 py-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-black uppercase text-sm tracking-wider hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all border-2 border-zinc-900 dark:border-white">
                  Close
                </button>
