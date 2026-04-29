@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV — Indra Mochamad Farros</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body {
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      color: #1f2937;
+      background: #e5e7eb;
+      line-height: 1.5;
+      font-size: 10.5pt;
+    }
+
+    /* ===== Page (A4) ===== */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 24px auto;
+      padding: 16mm 14mm;
+      background: #ffffff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    /* ===== Header ===== */
+    header {
+      border-bottom: 3px solid #ea580c;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+    header h1 {
+      font-size: 26pt;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #0f172a;
+      line-height: 1.1;
+    }
+    header .role {
+      font-size: 12pt;
+      font-weight: 600;
+      color: #ea580c;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px 24px;
+      margin-top: 12px;
+      font-size: 9.5pt;
+      color: #475569;
+    }
+    .contact-grid .item { display: flex; gap: 6px; }
+    .contact-grid .label { font-weight: 700; color: #0f172a; }
+    .contact-grid a { color: #475569; text-decoration: none; }
+    .contact-grid a:hover { color: #ea580c; }
+
+    /* ===== Sections ===== */
+    section { margin-bottom: 16px; page-break-inside: avoid; }
+    h2.section-title {
+      font-size: 11pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: #0f172a;
+      padding-bottom: 4px;
+      margin-bottom: 10px;
+      border-bottom: 1.5px solid #cbd5e1;
+      position: relative;
+    }
+    h2.section-title::before {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -1.5px;
+      width: 48px; height: 1.5px;
+      background: #ea580c;
+    }
+
+    /* ===== Summary ===== */
+    .summary { text-align: justify; color: #334155; }
+
+    /* ===== Skills Table ===== */
+    .skills {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 6px 14px;
+    }
+    .skills .cat {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 9.5pt;
+    }
+    .skills .tech {
+      color: #334155;
+      font-size: 9.5pt;
+    }
+
+    /* ===== Experience / Education ===== */
+    .item-block {
+      margin-bottom: 12px;
+      page-break-inside: avoid;
+    }
+    .item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 2px;
+    }
+    .item-title {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 11pt;
+    }
+    .item-title .company {
+      font-weight: 600;
+      color: #ea580c;
+    }
+    .item-period {
+      font-size: 9pt;
+      font-weight: 600;
+      color: #64748b;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .item-block ul {
+      padding-left: 18px;
+      margin-top: 4px;
+      color: #334155;
+    }
+    .item-block ul li {
+      margin-bottom: 2px;
+      text-align: justify;
+    }
+    .item-block ul li::marker { color: #ea580c; }
+    .item-block p.desc {
+      color: #334155;
+      margin-top: 2px;
+      text-align: justify;
+    }
+
+    /* ===== Projects Grid ===== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px 14px;
+    }
+    .project {
+      border-left: 3px solid #ea580c;
+      padding: 6px 10px;
+      background: #f8fafc;
+      page-break-inside: avoid;
+    }
+    .project .p-title {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 10pt;
+      margin-bottom: 2px;
+    }
+    .project .p-tech {
+      font-size: 8.5pt;
+      color: #ea580c;
+      font-weight: 600;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .project .p-desc {
+      font-size: 9pt;
+      color: #475569;
+      text-align: justify;
+      line-height: 1.45;
+    }
+
+    /* ===== Footer ===== */
+    footer.cv-footer {
+      margin-top: 18px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 8.5pt;
+      color: #94a3b8;
+      font-style: italic;
+    }
+
+    /* ===== Page Break ===== */
+    .page + .page { margin-top: 24px; }
+    .page.break { page-break-before: always; }
+
+    /* ===== Print Button (screen only) ===== */
+    .print-bar {
+      position: fixed;
+      top: 16px; right: 16px;
+      z-index: 100;
+    }
+    .print-bar button {
+      background: #ea580c;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      font-size: 10pt;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.35);
+      transition: all 0.2s;
+    }
+    .print-bar button:hover {
+      background: #c2410c;
+      transform: translateY(-1px);
+    }
+
+    /* ===== Print Styles ===== */
+    @page {
+      size: A4;
+      margin: 0;
+    }
+    @media print {
+      body { background: white; font-size: 10pt; }
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        padding: 14mm 12mm;
+        box-shadow: none;
+      }
+      .print-bar { display: none; }
+      a { color: inherit; text-decoration: none; }
+      section { page-break-inside: avoid; }
+      .item-block, .project { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-bar">
+    <button onclick="window.print()">🖨 Print / Save PDF</button>
+  </div>
+
+  <div class="page">
+    <!-- Header -->
+    <header>
+      <h1>Indra Mochamad Farros</h1>
+      <div class="role">Software Engineer</div>
+      <div class="contact-grid">
+        <div class="item"><span class="label">Telp:</span><a href="tel:+6285155065353">+62 851-5506-5353</a></div>
+        <div class="item"><span class="label">Email:</span><a href="mailto:indrafarros.fi@gmail.com">indrafarros.fi@gmail.com</a></div>
+        <div class="item"><span class="label">Website:</span><a href="https://indrafarros.my.id">indrafarros.my.id</a></div>
+        <div class="item"><span class="label">LinkedIn:</span><a href="https://linkedin.com/in/indrafarros">linkedin.com/in/indrafarros</a></div>
+        <div class="item"><span class="label">GitHub:</span><a href="https://github.com/indrafarros1">github.com/indrafarros1</a></div>
+        <div class="item"><span class="label">Lokasi:</span><span>Jakarta, Indonesia</span></div>
+      </div>
+    </header>
+
+    <!-- Summary -->
+    <section>
+      <h2 class="section-title">Ringkasan</h2>
+      <p class="summary">
+        Software Engineer dengan pengalaman 4+ tahun membangun sistem enterprise dan aplikasi berperforma tinggi di lingkungan produksi. Berspesialisasi pada backend systems, pengembangan API, dan arsitektur sistem. Berpengalaman menghadirkan solusi yang scalable di berbagai industri seperti logistik, pemerintahan, keuangan, dan kesehatan.
+      </p>
+    </section>
+
+    <!-- Skills -->
+    <section>
+      <h2 class="section-title">Keahlian Teknis</h2>
+      <div class="skills">
+        <div class="cat">Bahasa & Framework</div>
+        <div class="tech">Golang, TypeScript, PHP, JavaScript, Node.js, NestJS, Express.js, Laravel, CodeIgniter, Vue.js, React Native (Expo)</div>
+        <div class="cat">Database</div>
+        <div class="tech">PostgreSQL, MySQL</div>
+        <div class="cat">Lainnya</div>
+        <div class="tech">System Design, REST API, WebSocket, Integrasi Payment Gateway, Integrasi API Bea Cukai</div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section>
+      <h2 class="section-title">Pengalaman Profesional</h2>
+
+      <div class="item-block">
+        <div class="item-head">
+          <div class="item-title">Software Engineer <span class="company">— PT EDI Indonesia</span></div>
+          <div class="item-period">Mar 2023 – Sekarang</div>
+        </div>
+        <ul>
+          <li>Mengembangkan dan memelihara berbagai aplikasi enterprise, termasuk sistem Helpdesk internal, sinkronisasi B2B billing, dan integrasi dengan sistem Bea Cukai.</li>
+          <li>Melakukan optimasi pada platform logistik kritikal seperti Airport TPS Online.</li>
+          <li>Membangun aplikasi mobile Helpdesk cross-platform (React Native Expo) untuk Android dan iOS dengan fitur push notification dan dukungan offline.</li>
+          <li>Mengimplementasikan role-based access control, penegakan SLA, dan notifikasi real-time berbasis WebSocket pada sistem Helpdesk.</li>
+          <li>Menjaga uptime 99,9% untuk platform pertukaran data logistik yang bersifat mission-critical.</li>
+        </ul>
+      </div>
+
+      <div class="item-block">
+        <div class="item-head">
+          <div class="item-title">Web Developer <span class="company">— Migen Software House</span></div>
+          <div class="item-period">Jun 2021 – Des 2022</div>
+        </div>
+        <ul>
+          <li>Membangun solusi web kustom untuk klien di berbagai industri: travel, hospitality, keuangan, kesehatan, dan pemerintahan.</li>
+          <li>Mengembangkan platform B2B agent ticket booking dengan integrasi payment gateway dan invoicing otomatis.</li>
+          <li>Membuat modul hotel booking dengan integrasi API pihak ketiga dan alur pembayaran yang aman.</li>
+          <li>Membangun sistem POS khusus untuk toko emas dan forex dengan harga real-time dan dukungan multi-mata uang.</li>
+          <li>Mengembangkan sistem pelaporan harta kekayaan (LHKPN) untuk kementerian dengan workflow persetujuan dan audit trail.</li>
+        </ul>
+      </div>
+
+      <div class="item-block">
+        <div class="item-head">
+          <div class="item-title">Freelance Web Developer <span class="company">— Independent</span></div>
+          <div class="item-period">2020 – Sekarang</div>
+        </div>
+        <ul>
+          <li>Menerima proyek freelance untuk pengembangan website company profile, landing page, dan aplikasi web kustom sesuai kebutuhan klien.</li>
+          <li>Menangani proyek end-to-end mulai dari requirement gathering, desain, pengembangan, deployment, hingga maintenance.</li>
+          <li>Berkolaborasi dengan klien lintas industri (UMKM, startup, komunitas) untuk menghadirkan solusi digital yang efisien dan tepat guna.</li>
+        </ul>
+      </div>
+
+      <div class="item-block">
+        <div class="item-head">
+          <div class="item-title">Junior Web Developer <span class="company">— PT Penerbit Erlangga</span></div>
+          <div class="item-period">Jul 2020 – Agu 2020</div>
+        </div>
+        <ul>
+          <li>Membantu pengembangan perangkat web internal dan pemeliharaan platform web yang sudah berjalan.</li>
+        </ul>
+      </div>
+
+      <div class="item-block">
+        <div class="item-head">
+          <div class="item-title">Access Data Management <span class="company">— Telkom Indonesia (Internship)</span></div>
+          <div class="item-period">2018</div>
+        </div>
+        <ul>
+          <li>Mengelola protokol akses data dan membantu monitoring infrastruktur jaringan selama program magang.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section>
+      <h2 class="section-title">Pendidikan</h2>
+      <div class="item-block">
+        <div class="item-head">
+          <div class="item-title">Sarjana Komputer (S.Kom) <span class="company">— Universitas Komputer Indonesia</span></div>
+          <div class="item-period">2016 – 2020</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========== PAGE 2 ========== -->
+  <div class="page break">
+    <!-- Projects -->
+    <section>
+      <h2 class="section-title">Proyek</h2>
+      <div class="projects-grid">
+        <div class="project">
+          <div class="p-title">Helpdesk System</div>
+          <div class="p-tech">Golang · Vue 3 · PostgreSQL</div>
+          <div class="p-desc">Aplikasi helpdesk enterprise dengan RBAC, penegakan SLA otomatis, dan notifikasi WebSocket real-time. Clean architecture Golang untuk konkurensi tinggi.</div>
+        </div>
+        <div class="project">
+          <div class="p-title">Helpdesk MTI Mobile</div>
+          <div class="p-tech">React Native · Expo · Android · iOS</div>
+          <div class="p-desc">Aplikasi mobile cross-platform dengan lampiran foto, push notification, dan dukungan draft offline. Terhubung ke backend Golang via REST API.</div>
+        </div>
+        <div class="project">
+          <div class="p-title">Airport TPS Online</div>
+          <div class="p-tech">Integrasi · API Bea Cukai · Logistik</div>
+          <div class="p-desc">Platform mission-critical untuk pertukaran data kargo dengan Bea Cukai. Sinkronisasi B2B billing otomatis dengan uptime 99,9%.</div>
+        </div>
+        <div class="project">
+          <div class="p-title">Agent Ticket Booking</div>
+          <div class="p-tech">CodeIgniter · MySQL · Payment Gateway</div>
+          <div class="p-desc">Platform B2B multi-tenant dengan reservasi tiket, payment gateway, tracking komisi agen, dan invoicing otomatis.</div>
+        </div>
+        <div class="project">
+          <div class="p-title">Hotel Booking Integration</div>
+          <div class="p-tech">Integrasi API · Payment Gateway</div>
+          <div class="p-desc">Integrasi API inventory hotel pihak ketiga dengan ketersediaan kamar real-time, alur pembayaran multi-gateway, dan notifikasi email otomatis.</div>
+        </div>
+        <div class="project">
+          <div class="p-title">Gold & Forex POS</div>
+          <div class="p-tech">CodeIgniter · MySQL · Reporting</div>
+          <div class="p-desc">Sistem POS untuk retail emas & valas dengan harga real-time, kalkulasi multi-mata uang, laporan profit/loss, dan cetak struk thermal.</div>
+        </div>
+        <div class="project">
+          <div class="p-title">Ministry LHKPN System</div>
+          <div class="p-tech">Laravel · MySQL</div>
+          <div class="p-desc">Sistem compliance pemerintah untuk pelaporan LHKPN dengan workflow persetujuan, audit trail, dan laporan yang dapat diekspor.</div>
+        </div>
+        <div class="project">
+          <div class="p-title">PJU Production App</div>
+          <div class="p-tech">CodeIgniter · MySQL · Produksi</div>
+          <div class="p-desc">Sistem manajemen produksi manufaktur tiang PJU dengan tracking batch, quality control, manajemen material, dan laporan compliance.</div>
+        </div>
+        <div class="project">
+          <div class="p-title">Logistics Container Module</div>
+          <div class="p-tech">PHP · Logistik · Optimasi</div>
+          <div class="p-desc">Modul operasi pengembalian kontainer dengan tracking status, kalkulasi demurrage, penjadwalan, dan visibilitas utilisasi armada real-time.</div>
+        </div>
+        <div class="project">
+          <div class="p-title">Beauty Clinic Management</div>
+          <div class="p-tech">CodeIgniter · Kesehatan</div>
+          <div class="p-desc">Sistem manajemen klinik kecantikan dengan appointment, riwayat treatment, CRM pasien, dan pelaporan keuangan. Optimasi database dan bug fixing.</div>
+        </div>
+        <div class="project">
+          <div class="p-title">Stunting Awareness Portal</div>
+          <div class="p-tech">Frontend · Responsif</div>
+          <div class="p-desc">Website informasi responsif untuk Puskesmas fokus pencegahan stunting. Konten edukasi, panduan tumbuh kembang, dan kalkulator BMI interaktif.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="cv-footer">
+      Referensi tersedia atas permintaan · Diperbarui 2025
+    </footer>
+  </div>
+</body>
+</html>

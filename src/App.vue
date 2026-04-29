@@ -213,8 +213,8 @@ const timeline: TimelineItem[] = [
 const education: Education[] = [
   {
     year: "2016 - 2020",
-    degree: "Sarjana Komputer (S.Kom)",
-    institution: "Universitas Indraprasta PGRI",
+    degree: "Sistem Informasi",
+    institution: "Universitas Komputer Indonesia",
     description: "Focused on software engineering, database systems, and web application development."
   }
 ];
